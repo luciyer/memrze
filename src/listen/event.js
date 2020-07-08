@@ -44,7 +44,7 @@ const wasBotTweet = () => console.log("Event: Bot tweeted.");
 const tweetNotRecognized = () =>
   console.log("No recognizable command or response found.");
 
-exports.parseTweets = (tweet_array) => {
+exports.parseTweets = (res, tweet_array) => {
 
   tweet_array.forEach(t => {
 
