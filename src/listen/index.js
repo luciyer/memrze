@@ -19,8 +19,14 @@ exports.getHandler = (req, res) => {
 
 exports.postHandler = (req, res) => {
 
-  console.log(req.body)
+  const tweet_events = req.body.tweet_create_events;
 
-  res.sendStatus(200)
+  if (tweet_events) {
+    parser.parseTweets(tweet_events)
+  } else {
+    console.log("No tweet_create_events found. Ignoring.")
+    res.sendStatus(200)
+  }
+
 
 }

@@ -1,12 +1,6 @@
 {
+  "bot_handle" : "memrze",
   "endpoints" : {
     "listen" : "/api/listen"
-  },
-  "commands" : [
-    "!help",
-    "!stats",
-    "!answer",
-    "!forgot",
-    "!archive"
-  ]
+  }
 }
