@@ -19,6 +19,7 @@ exports.getHandler = (req, res) => {
 
 exports.postHandler = (req, res) => {
 
+  console.log(req.body)
 
   res.sendStatus(200)
 
