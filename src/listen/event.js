@@ -1,4 +1,4 @@
-const IncomingTweet = require("./objects")
+const { IncomingTweet } = require("./objects")
 
 const card = require(appRoot + "/src/card")
 const twitter = require(appRoot + "/src/tweet")
