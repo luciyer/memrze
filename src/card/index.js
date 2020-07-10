@@ -23,8 +23,8 @@ const create = (tweet) => {
 }
 
 
-
 module.exports = {
+  create,
   commands,
   helpers
 }
