@@ -35,7 +35,7 @@ const checkAnswer = (t) => {
 }
 
 const createCard = (t) => {
-  console.log("CREATE NEW CARD")
+  card.create(t)
 }
 
 const wasBotTweet = () => console.log("Event: Bot tweeted.");
