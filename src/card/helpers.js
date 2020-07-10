@@ -36,9 +36,11 @@ exports.stageChange = (tweet, correct = true) => {
       reps[idx].correct = correct
       reps[idx].difficulty = updated_stage
 
+      card.save()
+
       db.newRepetition(card._id, tweet.thread_id, next_rep)
         .then(() => {
-          return card.save()
+          console.log("Created Rep")
         })
         .catch(console.error)
 
