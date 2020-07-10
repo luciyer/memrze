@@ -1,3 +1,4 @@
+const db = require(appRoot + "/db")
 const scheduler = require("./timing")
 
 const incrementStage = (current) => {
@@ -8,44 +9,49 @@ const decrementStage = (current) => {
   return current === 0 ? 0 : current - 1
 }
 
-exports.stageChange = (tweet, back = true) => {
+const updateStage = (current, correct) => {
+  return correct
+    ? decrementStage(current)
+    : incrementStage(current);
+}
+
+const getRep = (array, key, target) => {
+  return array.map(i => { return i[key] }).indexOf(target[key])
+}
+
+exports.stageChange = (tweet, correct = true) => {
 
   return db.retrieveCard(tweet.thread_id)
     .then(card => {
 
-      const idx = card.repetitions.map(i => {
-        return i.thread_id
-      }).indexOf(tweet.thread_id)
+      const reps = card.repetitions,
+            idx = getRep(reps, "thread_id", tweet),
+            updated_stage = updateStage(card.stage, correct),
+            next_rep = scheduler.next(updated_stage, tweet.created_date)
 
-      const updated_stage = back
-        ? incrementStage(card.stage)
-        : decrementStage(card.stage);
-
-      card.last_practice = Date.now()
       card.stage = updated_stage
+      card.last_practice = Date.now()
 
-      card.repetitions[idx].responded = Date.now()
-      card.repetitions[idx].correct = !back
-      card.repetitions[idx].difficulty = updated_stage
+      reps[idx].responded = Date.now()
+      reps[idx].correct = correct
+      reps[idx].difficulty = updated_stage
 
-      return card.save()
+      db.newRepetition(card._id, tweet.thread_id, next_rep)
+        .then(() => {
+          return card.save()
+        })
+        .catch(console.error)
 
     })
     .catch(console.error)
 
 }
 
-exports.nextRepetitionDate = (tweet) => {
+exports.checkAnswer = (tweet) => {
 
-  return db.retrieveCard(tweet.thread_id)
+  db.retrieveCard(tweet.thread_id)
     .then(card => {
-
-      const stage = card.stage.toString(),
-            seed = new Date(tweet.created_date);
-
-      return scheduler.next(stage, seed)
-
+      return card.content.answer === tweet.answer
     })
     .catch(console.error)
-
 }

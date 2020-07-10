@@ -7,6 +7,12 @@ const RECALL = 0.9,
       MS_HOUR = 1000 * 60 * 60,
       LEN = 20;
 
+const formatInput = (lvl, dt) => {
+  const level = lvl.toString(),
+        date = new Date(dt);
+  return { level, date }
+}
+
 const makeMap = (values) => {
   return new Map(Array(values.length).fill()
       .map((_, i) => i.toString()).reverse()
@@ -14,38 +20,43 @@ const makeMap = (values) => {
   )
 }
 
-const testTimer = (level, seed_date) => {
+const testTimer = (lvl, seed) => {
 
-  let ms = 1000,
-      timing_map = new Map([
-        ["5", 5],
-        ["4", 10],
-        ["3", 20],
-        ["2", 40],
-        ["1", 60],
-        ["0", 120]
-      ]);
+  const { level, seed_date } = formatInput(lvl, seed)
 
-  return new Date(Date.parse(seed_date) + (ms * timing_map.get(level)))
+  const ms = 1000,
+        timing_map = new Map([
+          ["5", 5],
+          ["4", 10],
+          ["3", 20],
+          ["2", 40],
+          ["1", 60],
+          ["0", 120]
+        ]);
+
+  const offset = ms * timing_map.get(level),
+        future_date = Date.parse(seed_date) + offset;
+
+  return new Date(future_date)
 
 }
 
-const ebbingTimer = (level, seed_date) => {
+const ebbingTimer = (lvl, seed) => {
+
+  const { level, seed_date } = formatInput(lvl, seed)
 
   let t = (s) => -s * Math.log(RECALL) * HOURS
 
-  let hour_intervals =
+  const hour_intervals =
     Array(STEPS).fill()
       .map((_, i) => i)
       .map(d => 1 + LEN * Math.sqrt(d))
-      .map(t);
+      .map(t)
 
-  let hour_map = makeMap(hour_intervals)
+  const offset = MS_HOUR * makeMap(hour_intervals).get(level),
+        future_date = Date.parse(seed_date) + offset;
 
-  const raw_date =
-    new Date(Date.parse(seed_date) + (MS_HOUR * hour_map.get(level)))
-
-  return Hours.nextAvailable(raw_date)
+  return Hours.nextAvailable(new Date(future_date))
 
 }
 

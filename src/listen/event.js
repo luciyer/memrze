@@ -34,10 +34,6 @@ const checkAnswer = (t) => {
   console.log("CHECK ANSWER")
 }
 
-const createCard = (t) => {
-  card.create(t)
-}
-
 const wasBotTweet = () => console.log("Event: Bot tweeted.");
 
 const tweetNotRecognized = () =>
@@ -50,15 +46,20 @@ exports.parseTweets = (res, tweet_array) => {
     let tweet = parseTweet(t)
 
     if (tweet.is_card) {
-      createCard(tweet)
+      card.create(tweet)
     }
 
     else if (tweet.is_reply) {
 
-      if (tweet.has_command)
+      if (!tweet.has_command) {
+
+          const correct = card.helpers.checkAnswer(tweet)
+          card.helpers.stageChange(tweet, correct)
+
+
+      } else {
         checkCommands(tweet)
-      else
-        checkAnswer(tweet)
+      }
 
     }
 

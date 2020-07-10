@@ -22,7 +22,6 @@ const create = (tweet) => {
     .catch(console.error)
 }
 
-
 module.exports = {
   create,
   commands,
