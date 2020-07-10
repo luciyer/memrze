@@ -27,7 +27,7 @@ exports.stageChange = (tweet, correct = true) => {
       const reps = card.repetitions,
             idx = getRep(reps, "thread_id", tweet),
             updated_stage = updateStage(card.stage, correct),
-            next_rep = scheduler.next(updated_stage, tweet.created_date)
+            next_rep = scheduler.test(updated_stage, tweet.created_date)
 
       card.stage = updated_stage
       card.last_practice = Date.now()
