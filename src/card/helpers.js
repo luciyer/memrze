@@ -35,10 +35,6 @@ exports.stageChange = (tweet, back = true) => {
 
 }
 
-exports.initialRepetitionDate = (tweet) => {
-  return scheduler.next("5", new Date(tweet.created_date))
-}
-
 exports.nextRepetitionDate = (tweet) => {
 
   return db.retrieveCard(tweet.thread_id)

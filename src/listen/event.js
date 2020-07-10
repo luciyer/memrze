@@ -12,7 +12,7 @@ const parseTweet = (t) => {
 const checkCommands = (t) => {
   switch(t.has_command) {
     case "__help__":
-      card.commands.sendAnswer(t)
+      card.commands.sendHelp(t)
       break;
     case "__stats__":
       card.commands.sendStats(t)

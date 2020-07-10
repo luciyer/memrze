@@ -11,7 +11,7 @@ const sendStats = (tweet) => {
   db.retrieveCard(tweet.thread_id)
     .then(card =>
       twitter.newReply(
-        tweet.id, tweet.user_handle, message.stats_message(card)
+        tweet.id, tweet.user_handle, twitter.message.stats_message(card)
       )
     )
     .catch(console.error)
