@@ -1,8 +1,7 @@
-const {
-  IncomingTweet,
-  help_text,
-  received_text
-} = require("../tweet")
+const IncomingTweet = require("./objects")
+
+const card = require(appRoot + "/src/card")
+const twitter = require(appRoot + "/src/tweet")
 
 const parseTweet = (t) => {
   let tweet = new IncomingTweet(t)
@@ -13,19 +12,19 @@ const parseTweet = (t) => {
 const checkCommands = (t) => {
   switch(t.has_command) {
     case "__help__":
-      console.log("HELP COMMAND")
+      card.commands.sendAnswer(t)
       break;
     case "__stats__":
-      console.log("STATS COMMAND")
+      card.commands.sendStats(t)
       break;
     case "__answer__":
-      console.log("ANSWER COMMAND")
+      card.commands.sendAnswer(t)
       break;
     case "__forgot__":
-      console.log("FORGOT COMMAND")
+      card.commands.sendAnswer(t)
       break;
     case "__archive__":
-      console.log("ARCHIVE COMMAND")
+      card.commands.archiveCard(t, false)
     default:
       break;
   }

@@ -37,6 +37,8 @@ exports.IncomingTweet = class {
         clean_text = this.text.replace(re, ""),
         content = clean_text.split("|").map(t => t.trim());
 
+        //do better content handling!
+
     return this.is_card
       ? { front: content[0], back: content[1] }
       : null;

@@ -1,4 +1,4 @@
-const ping = require("ping")
+const fetch = require("node-fetch")
 
 const serverUp = () => {
   console.log("Server running.")
@@ -11,12 +11,11 @@ const stayAwake = (url, interval = 25) => {
     setTimeout(() => {
 
       try {
-        ping.promise.probe(url)
-          .then((res) => {
-            console.log(`Pinged ${res.numeric_host}...`)
-          })
+        fetch(url).then(() =>
+          console.log(`Awake: Fetching ${url}.`)
+        )
       } catch (error) {
-        console.log(`Error pinging ${url}: ${error.message}.`)
+        console.log(`Error fetching ${url}: ${error.message}.`)
         console.log(`Running again in ${interval} minutes.`)
       } finally {
         stayAwake(url, interval)

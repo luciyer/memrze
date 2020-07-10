@@ -4,6 +4,8 @@ const path = require("path")
 const express = require("express")
 const bodyParser = require("body-parser")
 
+global.appRoot = path.resolve(__dirname)
+
 const config = require("./config"),
       util = require("./src/utils"),
       listener = require("./src/listen");
