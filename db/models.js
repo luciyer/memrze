@@ -4,8 +4,8 @@ const repetition_schema = new mongoose.Schema({
   thread_id : { type: String, required: true },
   send: { type: Date, required: true },
   sent: { type: Boolean, default: false },
-  responded: { type: Date, default: null },
-  correct: { type: Boolean, default: false },
+  responded: { type: Date },
+  correct: { type: Boolean },
   difficulty: { type: Number, min: 0, max: 5 }
 })
 
