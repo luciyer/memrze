@@ -43,11 +43,8 @@ const filterReps = (rep_array, interval) => {
       return false
 
     const send_date = new Date(d.rep.send)
-    const in_interval = (
-      send_date >= interval.begin && send_date < interval.end
-    )
 
-    return in_interval
+    return send_date < interval.end
 
   })
 
