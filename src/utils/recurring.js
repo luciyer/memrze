@@ -40,7 +40,7 @@ exports.pollDatabase = (every_n) => {
 
           twitter.newThread(
             r.user,
-            twitter.messages.prompt_message(r.count, r.prompt)
+            twitter.message.prompt_message(r.count, r.prompt)
           )
 
         })
