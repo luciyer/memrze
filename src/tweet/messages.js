@@ -9,7 +9,7 @@ const answer_message = (card) => {
 }
 
 const prompt_message = (reps, prompt) => {
-  return `[${reps + 1}]: ` + `${prompt}`;
+  return `[${reps}]: ` + `${prompt}`;
 }
 
 const help = "Hey, I'm a friendly bot made by @notluciyer to automate spaced" +

@@ -22,7 +22,7 @@ const sendStats = (tweet) => {
 const sendAnswer = (tweet) => {
 
   helpers.stageChange(tweet)
-    .then(() => {
+    .then(card => {
 
       twitter.newReply(
         tweet.thread_id,
