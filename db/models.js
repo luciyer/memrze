@@ -1,15 +1,16 @@
 const mongoose = require("mongoose")
 
 const repetition_schema = new mongoose.Schema({
-  thread_id : { type: String, required: true },
+  thread_id : { type: String },
   send: { type: Date, required: true },
   sent: { type: Boolean, default: false },
   responded: { type: Date },
   correct: { type: Boolean },
-  difficulty: { type: Number, min: 0, max: 5 }
+  stage: { type: Number, min: 0, max: 5 }
 })
 
 const card_schema = new mongoose.Schema({
+  user: { type: String, required: true, lowercase: true },
   created: { type: Date, default: Date.now },
   last_practice: { type: Date, default: Date.now },
   content: {

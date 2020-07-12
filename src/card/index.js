@@ -10,13 +10,7 @@ const create = (tweet) => {
   db.newCard(tweet)
     .then(card => {
 
-      const stage = card.stage.toString(),
-            seed = new Date(tweet.created_date),
-            next_rep = scheduler.next(stage, seed);
-
-      db.newRepetition(card._id, tweet.thread_id, next_rep)
-        .then(console.log)
-        .catch(console.error)
+      helpers.createRepetition(tweet, card)
 
     })
     .catch(console.error)

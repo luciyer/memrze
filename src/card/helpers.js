@@ -1,4 +1,5 @@
 const db = require(appRoot + "/db")
+const twitter = require(appRoot + "/src/tweet")
 const scheduler = require("./timing")
 
 const incrementStage = (current) => {
@@ -15,45 +16,81 @@ const updateStage = (current, correct) => {
     : incrementStage(current);
 }
 
-const getRep = (array, key, target) => {
-  return array.map(i => { return i[key] }).indexOf(target[key])
+const isLearned = (stage) => {
+  return stage === 0
 }
 
-exports.stageChange = (tweet, correct = true) => {
+const getRep = (array, target) => {
+  return array
+    .map(i => { return i.thread_id })
+    .indexOf(target.thread_id);
+}
+
+const archiveCard = (tweet) => {
+
+  return db.retrieveCard(tweet.thread_id)
+    .then(card => {
+      card.archive = true
+      return card.save()
+    })
+    .catch(console.error)
+
+}
+
+const stageChange = (tweet, correct = true) => {
 
   return db.retrieveCard(tweet.thread_id)
     .then(card => {
 
       const reps = card.repetitions,
-            idx = getRep(reps, "thread_id", tweet),
-            updated_stage = updateStage(card.stage, correct),
-            next_rep = scheduler.test(updated_stage, tweet.created_date)
+            idx = getRep(reps, tweet),
+            updated_stage = updateStage(card.stage, correct);
 
       card.stage = updated_stage
       card.last_practice = Date.now()
 
       reps[idx].responded = Date.now()
       reps[idx].correct = correct
-      reps[idx].difficulty = updated_stage
+      reps[idx].stage = updated_stage
 
-      card.save()
+      if (isLearned(updated_stage)){
+        archiveCard(tweet)
+          .then(() => {
+            twitter.newReply(
+              tweet.id,
+              tweet.user_handle,
+              twitter.messages.learned_card
+            )
+          })
+          .catch(console.error)
+      }
 
-      db.newRepetition(card._id, tweet.thread_id, next_rep)
-        .then(() => {
-          console.log("Created Rep")
-        })
-        .catch(console.error)
+      return card.save()
 
     })
     .catch(console.error)
 
 }
 
-exports.checkAnswer = (tweet) => {
+const createRepetition = (tweet, card) => {
+
+  const next_rep = scheduler.test(card.stage, tweet.created_date)
+  return db.newRepetition(card._id, tweet.thread_id, next_rep)
+
+}
+
+const checkAnswer = (tweet) => {
 
   db.retrieveCard(tweet.thread_id)
     .then(card => {
       return card.content.answer === tweet.answer
     })
     .catch(console.error)
+}
+
+module.exports = {
+  archiveCard,
+  stageChange,
+  createRepetition,
+  checkAnswer
 }

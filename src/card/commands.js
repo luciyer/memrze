@@ -11,7 +11,9 @@ const sendStats = (tweet) => {
   db.retrieveCard(tweet.thread_id)
     .then(card =>
       twitter.newReply(
-        tweet.id, tweet.user_handle, twitter.message.stats_message(card)
+        tweet.id,
+        tweet.user_handle,
+        twitter.message.stats_message(card)
       )
     )
     .catch(console.error)
@@ -33,25 +35,17 @@ const sendAnswer = (tweet) => {
 
 }
 
-const archiveCard = (tweet, learned = true) => {
+const archiveCard = (tweet) => {
 
-  const message = learned
-    ? twitter.message.learned_card
-    : twitter.message.archived_card;
-
-  db.retrieveCard(tweet.thread_id)
+  helpers.archiveCard(tweet)
     .then(card => {
-
-      card.archive = true
-
-      card
-        .save()
-        .then(twitter.newReply(tweet.id, tweet.user_handle, message))
-        .catch(console.error)
-
+      twitter.newReply(
+        tweet.id,
+        tweet.user_handle,
+        twitter.message.archived_card
+      )
     })
     .catch(console.error)
-
 }
 
 module.exports = {

@@ -54,8 +54,12 @@ exports.parseTweets = (res, tweet_array) => {
       if (!tweet.has_command) {
 
           const correct = card.helpers.checkAnswer(tweet)
-          card.helpers.stageChange(tweet, correct)
 
+          card.helpers.stageChange(tweet, correct)
+            .then(result => {
+              card.helpers.createRepetition(tweet, result)
+            })
+            .catch(console.error)
 
       } else {
         checkCommands(tweet)

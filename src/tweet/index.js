@@ -1,5 +1,6 @@
 require("dotenv").config()
 
+const task = require("node-schedule")
 const Twitter = require("twitter-lite")
 const message = require("./messages")
 
@@ -32,9 +33,14 @@ const newReply = (tweet_id, handle, text) => {
     .catch(console.error)
 }
 
+const scheduleNewThread = (send_at, handle, text) => {
+  return task.scheduleJob(send_at, newThread(handle, text))
+}
+
 module.exports = {
   debugClient,
   newThread,
   newReply,
+  scheduleNewThread,
   message: message
 }

@@ -18,6 +18,7 @@ mongoose.connect(db_uri, {
 exports.newCard = (tweet) => {
 
   const card_contents = {
+    user: tweet.user_handle,
     content : {
       prompt: tweet.card_content.front,
       answer: tweet.card_content.back
@@ -33,7 +34,7 @@ exports.retrieveCard = (thread_id) => {
   return Card.findOne(filter).exec()
 }
 
-exports.newRepetition = (card_id, thread_id, send_date) => {
+exports.newRepetition = (card_id, send_date, thread_id) => {
 
   const rep_contents = {
     repetitions: {
@@ -46,5 +47,17 @@ exports.newRepetition = (card_id, thread_id, send_date) => {
     { $push: rep_contents },
     { new: true, useFindAndModify: false }
   ).exec()
+
+}
+
+exports.retrieveActiveCards = () => {
+
+  return Card.find({
+    archive: false,
+    repetitions: {
+      $exists: true,
+      $ne: []
+    }
+  }).exec()
 
 }

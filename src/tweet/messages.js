@@ -8,8 +8,8 @@ const answer_message = (card) => {
   return `Answer: \"${card.content.answer}\". Regressing card.`
 }
 
-const prompt_message = (card) => {
-  return `[${card.repetitions.length + 1}]: ` + `${card.content.prompt}`;
+const prompt_message = (reps, prompt) => {
+  return `[${reps + 1}]: ` + `${prompt}`;
 }
 
 const help = "Hey, I'm a friendly bot made by @notluciyer to automate spaced" +
