@@ -1,6 +1,7 @@
 const fetch = require("node-fetch")
 const schedule = require("node-schedule")
 
+const db = require(appRoot + "/db")
 const upcoming = require("./reps")
 const twitter = require(appRoot + "/src/tweet")
 
