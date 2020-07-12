@@ -43,6 +43,8 @@ exports.pollDatabase = (every_n) => {
             twitter.message.prompt_message(r.count, r.prompt)
           )
 
+          db.markSent(r.rep._id)
+
         })
 
       })

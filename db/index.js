@@ -50,6 +50,13 @@ exports.newRepetition = (card_id, send_date, thread_id) => {
 
 }
 
+exports.markSent = (rep_id) => {
+  return Repetition.findByIdAndUpdate(
+    rep_id,
+    { sent: true }
+  ).exec()
+}
+
 exports.retrieveActiveCards = () => {
 
   return Card.find({
