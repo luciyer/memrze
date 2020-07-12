@@ -24,14 +24,10 @@ const checkCommands = (t) => {
       card.commands.sendAnswer(t)
       break;
     case "__archive__":
-      card.commands.archiveCard(t, false)
+      card.commands.archiveCard(t)
     default:
       break;
   }
-}
-
-const checkAnswer = (t) => {
-  console.log("CHECK ANSWER")
 }
 
 const wasBotTweet = () => console.log("Event: Bot tweeted.");

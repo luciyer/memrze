@@ -18,14 +18,14 @@ const testTimer = (lvl, seed) => {
 
   const seed_date = new Date(seed)
 
-  const ms = 1000,
+  const ms = 60 * 1000,
         timing_map = new Map([
-          ["5", 5],
-          ["4", 10],
-          ["3", 20],
-          ["2", 40],
-          ["1", 60],
-          ["0", 120]
+          ["5", 1],
+          ["4", 2],
+          ["3", 3],
+          ["2", 5],
+          ["1", 10],
+          ["0", 15]
         ]);
 
   const offset = ms * timing_map.get(lvl.toString()),
