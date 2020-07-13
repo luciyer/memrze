@@ -3,7 +3,7 @@ require("dotenv").config()
 const Agenda = require("agenda")
 const fetch = require("node-fetch")
 
-const card = require(appRoot + "/src/card")
+const db = require(appRoot + "/db")
 const twitter = require(appRoot + "/src/tweet")
 
 const db_uri = process.env.MONGODB_URI || "mongodb://localhost/dev"
@@ -35,7 +35,14 @@ queue.define("send repetition", async job => {
 
   const { card_id, to_user, message } = job.attrs.data
   const send_result = await twitter.newThread(to_user, message)
-  const created_rep = await card.createRep(card_id, send_result.id_str)
+
+  const rep_contents = {
+    repetitions: {
+      thread_id: thread_id
+    }
+  }
+
+  const created_rep = await db.newRepetition(card_id, rep_contents)
 
 })
 
