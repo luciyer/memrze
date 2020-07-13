@@ -1,3 +1,4 @@
+const db = require(appRoot + "/db")
 const agenda = require(appRoot + "/src/agenda")
 const future = require(appRoot + "/src/agenda/timing")
 
@@ -14,7 +15,7 @@ const createCard = (tweet) => {
     }
   }
 
-  return agenda.now("create card", card_contents)
+  return db.newCard(card_contents)
 
 }
 

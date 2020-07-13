@@ -32,14 +32,6 @@ queue.define("keep server awake", job => {
 
 })
 
-queue.define("create card"), async (job, done) => {
-
-  const card_contents = job.attrs.data
-  console.log(card_contents)
-  return done(db.newCard(card_contents))
-
-}
-
 queue.define("next repetition", async job => {
 
   const { card_id, to_user, message } = job.attrs.data
