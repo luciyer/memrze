@@ -30,17 +30,4 @@ queue.define("send repetition", async job => {
 
 })
 
-exports.initialize = async () => {
-  await queue.start()
-  queue.every("25 minutes", "keep server awake")
-}
-
-exports.stop = async () => {
-  console.log("Stop Queue")
-  await queue.stop()
-  process.exit(0)
-}
-
-exports.queueRepetition = (send_date, job_data) => {
-  queue.schedule(send_date, "send repetition", job_data)
-}
+module.exports = queue

@@ -1,7 +1,7 @@
 require("dotenv").config()
 const fetch = require("node-fetch")
 
-exports.stayAwake = () => {
+module.exports = () => {
 
   const url = process.env.SERVER_URL
 
