@@ -1,6 +1,5 @@
 const db = require(appRoot + "/db")
 const twitter = require(appRoot + "/src/tweet")
-const scheduler = require("./timing")
 
 const incrementStage = (current) => {
   return current === 5 ? 5 : current + 1

@@ -1,7 +1,6 @@
 const { IncomingTweet } = require("./objects")
 
 const card = require(appRoot + "/src/card")
-const twitter = require(appRoot + "/src/tweet")
 
 const parseTweet = (t) => {
   let tweet = new IncomingTweet(t)
@@ -37,12 +36,13 @@ const tweetNotRecognized = () =>
 
 exports.parseTweets = (res, tweet_array) => {
 
-  tweet_array.forEach(t => {
+  tweet_array.forEach(async t => {
 
     let tweet = parseTweet(t)
 
     if (tweet.is_card) {
-      card.createCard(tweet)
+      const new_card = await card.createCard(tweet)
+      card.createRep(new_card)
     }
 
     else if (tweet.is_reply) {
@@ -50,12 +50,8 @@ exports.parseTweets = (res, tweet_array) => {
       if (!tweet.has_command) {
 
           const correct = card.helpers.checkAnswer(tweet)
-
-          card.helpers.stageChange(tweet, correct)
-            .then(result => {
-              card.helpers.createRepetition(tweet, result)
-            })
-            .catch(console.error)
+          const updated_card = await card.helpers.stageChange(tweet, correct)
+          card.createRep(updated_card)
 
       } else {
         checkCommands(tweet)

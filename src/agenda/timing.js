@@ -54,7 +54,4 @@ const ebbingTimer = (lvl, seed) => {
 
 }
 
-module.exports = {
-  next: ebbingTimer,
-  test: testTimer
-}
+module.exports = testTimer

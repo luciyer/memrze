@@ -5,6 +5,7 @@ const fetch = require("node-fetch")
 
 const db = require(appRoot + "/db")
 const twitter = require(appRoot + "/src/tweet")
+const scheduler = require("./timing")
 
 const db_uri = process.env.MONGODB_URI || "mongodb://localhost/dev"
 
@@ -31,7 +32,15 @@ queue.define("keep server awake", job => {
 
 })
 
-queue.define("send repetition", async job => {
+queue.define("create card"), async job => {
+
+  const card_contents = job.attrs.data
+  console.log(card_contents)
+  return db.newCard(card_contents)
+
+}
+
+queue.define("next repetition", async job => {
 
   const { card_id, to_user, message } = job.attrs.data
   const send_result = await twitter.newThread(to_user, message)
