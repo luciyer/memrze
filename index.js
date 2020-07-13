@@ -9,7 +9,7 @@ global.appRoot = path.resolve(__dirname)
 const config = require("./config"),
       util = require("./src/utils"),
       listener = require("./src/listen"),
-      agenda = require("./src/agenda")
+      agenda = require("./src/agenda");
 
 const app = express()
 
