@@ -20,7 +20,7 @@ const sendStats = async (tweet) => {
 
 const sendAnswer = async (tweet) => {
 
-  const related_card = await helpers.stageChange(tweet)
+  const related_card = await helpers.stageChange(tweet, false)
 
   return twitter.newReply(
     tweet.thread_id,

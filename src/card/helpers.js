@@ -25,59 +25,43 @@ const getRep = (array, target) => {
     .indexOf(target.thread_id);
 }
 
-const archiveCard = (tweet) => {
+const archiveCard = async (tweet) => {
+  const related_card = await db.retrieveCard(tweet.thread_id)
+  related_card.archive = true
+  return related_card.save()
+}
 
-  return db.retrieveCard(tweet.thread_id)
-    .then(card => {
-      card.archive = true
-      return card.save()
-    })
-    .catch(console.error)
+const stageChange = async (tweet, correct = true) => {
+
+  const related_card = await db.retrieveCard(tweet.thread_id)
+
+  const reps = related_card.repetitions,
+        idx = getRep(reps, tweet),
+        updated_stage = updateStage(related_card.stage, correct);
+
+  related_card.stage = updated_stage
+  related_card.last_practice = Date.now()
+
+  reps[idx].responded = Date.now()
+  reps[idx].correct = correct
+  reps[idx].stage = updated_stage
+
+  if (isLearned(updated_stage)) {
+    related_card.archive = true
+    twitter.newReply(
+      tweet.id,
+      tweet.user_handle,
+      twitter.messages.learned_card
+    )
+  }
+
+  return related_card.save()
 
 }
 
-const stageChange = (tweet, correct = true) => {
-
-  return db.retrieveCard(tweet.thread_id)
-    .then(card => {
-
-      const reps = card.repetitions,
-            idx = getRep(reps, tweet),
-            updated_stage = updateStage(card.stage, correct);
-
-      card.stage = updated_stage
-      card.last_practice = Date.now()
-
-      reps[idx].responded = Date.now()
-      reps[idx].correct = correct
-      reps[idx].stage = updated_stage
-
-      if (isLearned(updated_stage)){
-        archiveCard(tweet)
-          .then(() => {
-            twitter.newReply(
-              tweet.id,
-              tweet.user_handle,
-              twitter.messages.learned_card
-            )
-          })
-          .catch(console.error)
-      }
-
-      return card.save()
-
-    })
-    .catch(console.error)
-
-}
-
-const checkAnswer = (tweet) => {
-
-  db.retrieveCard(tweet.thread_id)
-    .then(card => {
-      return card.content.answer === tweet.answer
-    })
-    .catch(console.error)
+const checkAnswer = async (tweet) => {
+  const related_card = await db.retrieveCard(tweet.thread_id)
+  return related_card.content.answer === tweet.answer
 }
 
 module.exports = {
