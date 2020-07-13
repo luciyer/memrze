@@ -26,7 +26,7 @@ const createCard = async (tweet) => {
     message: twitter.message.prompt_message(rep_number, new_card.content.prompt)
   }
 
-  //agenda.schedule(send_date, "send repetition", job_data)
+  agenda.schedule(send_date, "send repetition", job_data)
 
 }
 
