@@ -32,6 +32,7 @@ queue.define("send repetition", async job => {
     }
   }
 
+  console.log(send_result)
   console.log("now make a new repetition.")
   //await db.newRepetition(card_id, rep_contents)
 
