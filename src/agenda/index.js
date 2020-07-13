@@ -30,8 +30,6 @@ queue.define("send repetition", async job => {
 
 })
 
-const stay_awake = queue.create("keep server awake")
-
 exports.initialize = async () => {
   await queue.start()
   queue.every("25 minutes", "keep server awake")
@@ -43,6 +41,6 @@ exports.stop = async () => {
   process.exit(0)
 }
 
-exports.queue = () => {
-  return queue
+exports.queueRepetition = (send_date, job_data) => {
+  queue.schedule(send_date, "send repetition", job_data)
 }

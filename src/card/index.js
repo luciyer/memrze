@@ -1,6 +1,6 @@
 const db = require(appRoot + "/db")
 const twitter = require(appRoot + "/src/tweet")
-const { queue } = require(appRoot + "/src/agenda")
+const agenda = require(appRoot + "/src/agenda")
 
 const commands = require("./commands")
 const helpers = require("./helpers")
@@ -25,6 +25,8 @@ const createCard = async (tweet) => {
     to_user: new_card.user,
     message: twitter.message.prompt_message(rep_number, new_card.content.prompt)
   }
+
+  agenda.queueRepetition(send_date, job_data)
 
   queue.schedule(send_date, "send repetition", job_data)
 
