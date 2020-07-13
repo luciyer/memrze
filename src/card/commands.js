@@ -22,11 +22,13 @@ const sendAnswer = async (tweet) => {
 
   const related_card = await helpers.stageChange(tweet, false)
 
-  return twitter.newReply(
+  await twitter.newReply(
     tweet.thread_id,
     tweet.user_handle,
     twitter.message.answer_message(related_card)
   )
+
+  return helpers.createRep(updated_card)
 
 }
 

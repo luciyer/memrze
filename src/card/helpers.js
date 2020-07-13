@@ -1,5 +1,7 @@
 const db = require(appRoot + "/db")
 const twitter = require(appRoot + "/src/tweet")
+const agenda = require(appRoot + "/src/agenda")
+const future = require(appRoot + "/src/agenda/timing")
 
 const incrementStage = (current) => {
   return current === 5 ? 5 : current + 1
@@ -25,10 +27,44 @@ const getRep = (array, target) => {
     .indexOf(target.thread_id);
 }
 
+const createCard = async (tweet) => {
+
+  const card_contents = {
+    user: tweet.user_handle,
+    content : {
+      prompt: tweet.card_content.front,
+      answer: tweet.card_content.back
+    }
+  }
+
+  return db.newCard(card_contents)
+
+}
+
+const createRep = (card) => {
+
+  const rep_number = card.repetitions.length + 1 || 1,
+        send_date = future(card.stage, new Date());
+
+  const rep_data = {
+    card_id: card._id,
+    to_user: card.user,
+    message: twitter.message.prompt_message(rep_number, card.content.prompt)
+  }
+
+  return agenda.schedule(send_date, "next repetition", rep_data)
+
+}
+
 const archiveCard = async (tweet) => {
   const related_card = await db.retrieveCard(tweet.thread_id)
   related_card.archive = true
   return related_card.save()
+}
+
+const checkAnswer = async (tweet) => {
+  const related_card = await db.retrieveCard(tweet.thread_id)
+  return related_card.content.answer === tweet.answer
 }
 
 const stageChange = async (tweet, correct = true) => {
@@ -59,13 +95,11 @@ const stageChange = async (tweet, correct = true) => {
 
 }
 
-const checkAnswer = async (tweet) => {
-  const related_card = await db.retrieveCard(tweet.thread_id)
-  return related_card.content.answer === tweet.answer
-}
 
 module.exports = {
+  createCard,
+  createRep,
   archiveCard,
-  stageChange,
-  checkAnswer
+  checkAnswer,
+  stageChange
 }
