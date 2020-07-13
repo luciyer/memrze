@@ -29,7 +29,7 @@ const createRep = (card) => {
     message: twitter.message.prompt_message(rep_number, card.content.prompt)
   }
 
-  agenda.schedule(send_date, "next repetition", rep_data)
+  return agenda.schedule(send_date, "next repetition", rep_data)
 
 }
 

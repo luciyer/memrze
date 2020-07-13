@@ -42,7 +42,9 @@ exports.parseTweets = (res, tweet_array) => {
 
     if (tweet.is_card) {
       const new_card = await card.createCard(tweet)
-      card.createRep(new_card)
+      const new_rep = await card.createRep(new_card)
+      console.log("Made new card:", new_card)
+      console.log("Made new rep:", new_rep)
     }
 
     else if (tweet.is_reply) {
@@ -51,7 +53,10 @@ exports.parseTweets = (res, tweet_array) => {
 
           const correct = card.helpers.checkAnswer(tweet)
           const updated_card = await card.helpers.stageChange(tweet, correct)
-          card.createRep(updated_card)
+          const new_rep = await card.createRep(updated_card)
+
+          console.log("Updated card:", updated_card)
+          console.log("Made new rep:", new_rep)
 
       } else {
         checkCommands(tweet)
