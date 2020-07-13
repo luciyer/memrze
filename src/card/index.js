@@ -30,21 +30,8 @@ const createCard = async (tweet) => {
 
 }
 
-const createRep = (card_id, thread_id) => {
-
-  const rep_contents = {
-    repetitions: {
-      thread_id: thread_id
-    }
-  }
-
-  return db.newRepetition(card_id, rep_contents)
-
-}
-
 module.exports = {
   createCard,
-  createRep,
   commands,
   helpers
 }
