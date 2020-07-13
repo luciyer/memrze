@@ -28,7 +28,7 @@ const sendAnswer = async (tweet) => {
     twitter.message.answer_message(related_card)
   )
 
-  return helpers.createRep(updated_card)
+  return helpers.createRep(related_card)
 
 }
 
