@@ -32,11 +32,11 @@ queue.define("keep server awake", job => {
 
 })
 
-queue.define("create card"), async job => {
+queue.define("create card"), async (job, done) => {
 
   const card_contents = job.attrs.data
   console.log(card_contents)
-  return db.newCard(card_contents)
+  return done(db.newCard(card_contents))
 
 }
 
