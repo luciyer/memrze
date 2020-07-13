@@ -41,11 +41,13 @@ exports.parseTweets = async (res, tweet_array) => {
     let tweet = parseTweet(t)
 
     if (tweet.is_card) {
+      console.log("Making new card")
       const new_card = await card.createCard(tweet)
-      const new_rep = await card.createRep(new_card)
+      //const new_rep = await card.createRep(new_card)
       console.log("Made new card:", new_card)
-      console.log("Made new rep:", new_rep)
-      return { new_card, new_rep }
+      return new_card
+      //console.log("Made new rep:", new_rep)
+      //return { new_card, new_rep }
     }
 
     else if (tweet.is_reply) {
