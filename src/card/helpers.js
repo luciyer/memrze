@@ -75,7 +75,7 @@ const stageChange = (tweet, correct = true) => {
 const createRepetition = (tweet, card) => {
 
   const next_rep = scheduler.test(card.stage, tweet.created_date)
-  return db.newRepetition(card._id, next_rep, tweet.id)
+  return db.newRepetition(card._id, next_rep)
 
 }
 

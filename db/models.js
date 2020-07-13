@@ -12,7 +12,7 @@ const repetition_schema = new mongoose.Schema({
 const card_schema = new mongoose.Schema({
   user: { type: String, required: true, lowercase: true },
   created: { type: Date, default: Date.now },
-  last_practice: { type: Date, default: Date.now },
+  last_practice: { type: Date },
   content: {
     prompt: String,
     answer: String
