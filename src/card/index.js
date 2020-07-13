@@ -16,7 +16,6 @@ const createCard = async (tweet) => {
     }
   }
 
-
   const new_card = await db.newCard(card_contents),
         rep_number = new_card.repetitions.length + 1,
         send_date = scheduler.test(new_card.stage, new Date());

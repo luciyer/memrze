@@ -42,7 +42,7 @@ exports.parseTweets = (res, tweet_array) => {
     let tweet = parseTweet(t)
 
     if (tweet.is_card) {
-      card.create(tweet)
+      card.createCard(tweet)
     }
 
     else if (tweet.is_reply) {
