@@ -20,7 +20,7 @@ const createCard = (tweet) => {
 
 const createRep = (card) => {
 
-  const rep_number = card.repetitions.length + 1,
+  const rep_number = card.repetitions.length + 1 || 1,
         send_date = future(card.stage, new Date());
 
   const rep_data = {
