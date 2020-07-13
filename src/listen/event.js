@@ -41,13 +41,11 @@ exports.parseTweets = async (res, tweet_array) => {
     let tweet = parseTweet(t)
 
     if (tweet.is_card) {
-      console.log("Making new card")
+
       const new_card = await card.createCard(tweet)
-      //const new_rep = await card.createRep(new_card)
-      console.log("Made new card:", new_card)
-      return new_card
-      //console.log("Made new rep:", new_rep)
-      //return { new_card, new_rep }
+      const new_rep = await card.createRep(new_card)
+      return { new_card, new_rep }
+
     }
 
     else if (tweet.is_reply) {
@@ -57,27 +55,29 @@ exports.parseTweets = async (res, tweet_array) => {
           const correct = card.helpers.checkAnswer(tweet)
           const updated_card = await card.helpers.stageChange(tweet, correct)
           const new_rep = await card.createRep(updated_card)
-
-          console.log("Updated card:", updated_card)
-          console.log("Made new rep:", new_rep)
-
           return { updated_card, new_rep }
 
       } else {
+
         const command_result = await checkCommands(tweet)
         return { command_result }
+
       }
 
     }
 
     else if (tweet.is_bot_event) {
+
       wasBotTweet()
       return "Bot Tweet"
+
     }
 
     else {
+
       tweetNotRecognized()
       return "Unrecognized"
+      
     }
 
   })
