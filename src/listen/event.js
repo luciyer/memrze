@@ -11,19 +11,19 @@ const parseTweet = (t) => {
 const checkCommands = (t) => {
   switch(t.has_command) {
     case "__help__":
-      card.commands.sendHelp(t)
+      return card.commands.sendHelp(t)
       break;
     case "__stats__":
-      card.commands.sendStats(t)
+      return card.commands.sendStats(t)
       break;
     case "__answer__":
-      card.commands.sendAnswer(t)
+      return card.commands.sendAnswer(t)
       break;
     case "__forgot__":
-      card.commands.sendAnswer(t)
+      return card.commands.sendAnswer(t)
       break;
     case "__archive__":
-      card.commands.archiveCard(t)
+      return card.commands.archiveCard(t)
     default:
       break;
   }
@@ -34,9 +34,9 @@ const wasBotTweet = () => console.log("Event: Bot tweeted.");
 const tweetNotRecognized = () =>
   console.log("No recognizable command or response found.");
 
-exports.parseTweets = (res, tweet_array) => {
+exports.parseTweets = async (res, tweet_array) => {
 
-  tweet_array.forEach(async t => {
+  const processed_tweets = tweet_array.map(async t => {
 
     let tweet = parseTweet(t)
 
@@ -45,6 +45,7 @@ exports.parseTweets = (res, tweet_array) => {
       const new_rep = await card.createRep(new_card)
       console.log("Made new card:", new_card)
       console.log("Made new rep:", new_rep)
+      return { new_card, new_rep }
     }
 
     else if (tweet.is_reply) {
@@ -58,21 +59,29 @@ exports.parseTweets = (res, tweet_array) => {
           console.log("Updated card:", updated_card)
           console.log("Made new rep:", new_rep)
 
+          return { updated_card, new_rep }
+
       } else {
-        checkCommands(tweet)
+        const command_result = await checkCommands(tweet)
+        return { command_result }
       }
 
     }
 
     else if (tweet.is_bot_event) {
       wasBotTweet()
+      return "Bot Tweet"
     }
 
     else {
       tweetNotRecognized()
+      return "Unrecognized"
     }
 
   })
+
+  const process_results = await Promise.all(processed_tweets)
+  console.log(process_results)
 
   res.sendStatus(200)
 

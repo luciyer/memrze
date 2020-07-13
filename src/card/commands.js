@@ -6,46 +6,40 @@ const sendHelp = (tweet) => {
   twitter.newReply(tweet.id, tweet.user_handle, twitter.message.help)
 }
 
-const sendStats = (tweet) => {
+const sendStats = async (tweet) => {
 
-  db.retrieveCard(tweet.thread_id)
-    .then(card =>
-      twitter.newReply(
-        tweet.id,
-        tweet.user_handle,
-        twitter.message.stats_message(card)
-      )
-    )
-    .catch(console.error)
-}
+  const related_card = await db.retrieveCard(tweet.thread_id)
 
-const sendAnswer = (tweet) => {
-
-  helpers.stageChange(tweet)
-    .then(card => {
-
-      twitter.newReply(
-        tweet.thread_id,
-        tweet.user_handle,
-        twitter.message.answer_message(card)
-      )
-
-    })
-    .catch(console.error)
+  return twitter.newReply(
+    tweet.id,
+    tweet.user_handle,
+    twitter.message.stats_message(related_card)
+  )
 
 }
 
-const archiveCard = (tweet) => {
+const sendAnswer = async (tweet) => {
 
-  helpers.archiveCard(tweet)
-    .then(card => {
-      twitter.newReply(
-        tweet.id,
-        tweet.user_handle,
-        twitter.message.archived_card
-      )
-    })
-    .catch(console.error)
+  const related_card = await helpers.stageChange(tweet)
+
+  return twitter.newReply(
+    tweet.thread_id,
+    tweet.user_handle,
+    twitter.message.answer_message(related_card)
+  )
+
+}
+
+const archiveCard = async (tweet) => {
+
+  const related_card = await helpers.archiveCard(tweet)
+
+  return twitter.newReply(
+    tweet.id,
+    tweet.user_handle,
+    twitter.message.archived_card
+  )
+
 }
 
 module.exports = {
