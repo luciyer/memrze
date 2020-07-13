@@ -17,8 +17,6 @@ app
   .use(bodyParser.json())
   .listen(process.env.PORT || 8080, async () => {
     util.serverUp()
-    await agenda.start()
-    agenda.every("25 minutes", "keep server awake")
   })
 
 app.get(config.endpoints.listen, listener.getHandler)

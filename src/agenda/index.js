@@ -26,7 +26,7 @@ queue.define("send repetition", async job => {
   const { card_id, to_user, message } = job.attrs.data
   const send_result = await twitter.newThread(to_user, message)
 
-  card.createRep(card_id, send_result.id_str)
+  //card.createRep(card_id, send_result.id_str)
 
 })
 
