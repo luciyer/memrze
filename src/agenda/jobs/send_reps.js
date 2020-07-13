@@ -37,20 +37,16 @@ const filterReps = (rep_array, interval) => {
 
   return rep_array.filter(d => {
 
-    const unsent = (!d.rep.sent && d.rep.send)
-
-    if (!unsent)
+    if (!d.rep.sent && d.rep.send)
       return false
-
-    const send_date = new Date(d.rep.send)
-
-    return send_date < interval.end
+      
+    return new Date(d.rep.send) < interval.end
 
   })
 
 }
 
-exports.getNextReps = async (m) => {
+getNextReps = async (m) => {
 
   const interval = nextInterval(m)
   const all = await getActiveReps()
@@ -58,3 +54,21 @@ exports.getNextReps = async (m) => {
   return filterReps(all, interval)
 
 }
+
+
+exports.sendReps = () => {
+
+  const rep_array = await getNextReps(1)
+
+  rep_array.forEach(r => {
+
+    twitter.newThread(
+      r.user,
+      twitter.message.prompt_message(r.count, r.prompt)
+    )
+
+    db.markSent(r.rep._id)
+
+  })
+
+})

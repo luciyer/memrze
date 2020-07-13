@@ -16,8 +16,7 @@ app
   .use(bodyParser.json())
   .listen(process.env.PORT || 8080, () => {
     util.serverUp()
-    util.recurring.stayAwake(process.env.SERVER_URL)
-    util.recurring.pollDatabase(1)
+    // Start Queue
   })
 
 app.get(config.endpoints.listen, listener.getHandler)
