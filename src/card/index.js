@@ -1,6 +1,7 @@
 const db = require(appRoot + "/db")
 const agenda = require(appRoot + "/src/agenda")
 const future = require(appRoot + "/src/agenda/timing")
+const twitter = require(appRoot + "/src/tweet")
 
 const commands = require("./commands")
 const helpers = require("./helpers")
