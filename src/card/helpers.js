@@ -51,7 +51,7 @@ const stageChange = async (tweet, correct = true) => {
     twitter.newReply(
       tweet.id,
       tweet.user_handle,
-      twitter.messages.learned_card
+      twitter.message.learned_card
     )
   }
 
