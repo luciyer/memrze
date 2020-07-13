@@ -1,8 +1,9 @@
+require("dotenv").config()
+
 const Agenda = require("agenda")
 
-const jobs = require("./jobs")
 const twitter = require(appRoot + "/src/tweet")
-const db = require(appRoot + "/db")
+const card = require(appRoot + "/src/card")
 
 const db_uri = process.env.MONGODB_URI || "mongodb://localhost/dev"
 
@@ -18,7 +19,15 @@ const connection_options = {
 const queue = new Agenda(connection_options)
 
 queue.define("keep server awake", job => {
-  jobs.stayAwake()
+
+    const url = process.env.SERVER_URL
+
+    fetch(url)
+      .then(() => console.log(`Awake: Fetching ${url}.`))
+      .catch(error => {
+          console.log(`Error fetching ${url}: ${error.message}.`)
+      })
+
 })
 
 queue.define("send repetition", async job => {
@@ -26,15 +35,7 @@ queue.define("send repetition", async job => {
   const { card_id, to_user, message } = job.attrs.data
   const send_result = await twitter.newThread(to_user, message)
 
-  const rep_contents = {
-    repetitions: {
-      thread_id: thread_id
-    }
-  }
-
-  console.log(send_result)
-  console.log("now make a new repetition.")
-  //await db.newRepetition(card_id, rep_contents)
+  //await card.createRep(card_id, send_result.id_str)
 
 })
 
