@@ -18,7 +18,7 @@ const testTimer = (lvl, seed) => {
 
   const seed_date = new Date(seed)
 
-  const ms = 60 * 1000,
+  const ms = 10 * 1000,
         timing_map = new Map([
           ["5", 1],
           ["4", 2],
