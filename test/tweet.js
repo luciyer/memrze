@@ -1,5 +1,74 @@
-const twitter = require("../src/tweet")
+const { IncomingTweet } = require("../src/listen/objects")
 
-twitter.debugClient()
+const sample_tweets = {
+   created_at: 'Mon Jul 13 02:32:23 +0000 2020',
+   id: 1282503107344306200,
+   id_str: '1282503107344306177',
+   text: '@memrze a|b',
+   source: '<a href="https://about.twitter.com/products/tweetdeck" rel="nofollow">TweetDeck</a>',
+   truncated: false,
+   in_reply_to_status_id: null,
+   in_reply_to_status_id_str: null,
+   in_reply_to_user_id: 1245255861729144800,
+   in_reply_to_user_id_str: '1245255861729144833',
+   in_reply_to_screen_name: 'memrze',
+   user: {
+     id: 1243282405512929300,
+     id_str: '1243282405512929281',
+     name: 'Luc',
+     screen_name: 'notluciyer',
+     location: 'Argentina',
+     url: null,
+     description: null,
+     translator_type: 'none',
+     protected: false,
+     verified: false,
+     followers_count: 2,
+     friends_count: 73,
+     listed_count: 0,
+     favourites_count: 5,
+     statuses_count: 12,
+     created_at: 'Thu Mar 26 21:03:37 +0000 2020',
+     utc_offset: null,
+     time_zone: null,
+     geo_enabled: false,
+     lang: null,
+     contributors_enabled: false,
+     is_translator: false,
+     profile_background_color: 'F5F8FA',
+     profile_background_image_url: '',
+     profile_background_image_url_https: '',
+     profile_background_tile: false,
+     profile_link_color: '1DA1F2',
+     profile_sidebar_border_color: 'C0DEED',
+     profile_sidebar_fill_color: 'DDEEF6',
+     profile_text_color: '333333',
+     profile_use_background_image: true,
+     profile_image_url: 'http://pbs.twimg.com/profile_images/1244036719495860225/CkBQNcY7_normal.jpg',
+     profile_image_url_https: 'https://pbs.twimg.com/profile_images/1244036719495860225/CkBQNcY7_normal.jpg',
+     default_profile: true,
+     default_profile_image: false,
+     following: null,
+     follow_request_sent: null,
+     notifications: null
+   },
+   geo: null,
+   coordinates: null,
+   place: null,
+   contributors: null,
+   is_quote_status: false,
+   quote_count: 0,
+   reply_count: 0,
+   retweet_count: 0,
+   favorite_count: 0,
+   entities: { hashtags: [], urls: [], user_mentions: [Array], symbols: [] },
+   favorited: false,
+   retweeted: false,
+   filter_level: 'low',
+   lang: 'und',
+   timestamp_ms: '1594607543203'
+}
 
-twitter.newThread("notluciyer", "hello, this is a test!")
+const tweet = IncomingTweet(sample_tweet)
+
+console.log(tweet)
