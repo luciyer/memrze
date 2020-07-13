@@ -38,7 +38,7 @@ queue.define("send repetition", async job => {
 
   const rep_contents = {
     repetitions: {
-      thread_id: thread_id
+      thread_id: send_result.id_str
     }
   }
 
