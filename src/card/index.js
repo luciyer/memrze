@@ -28,8 +28,6 @@ const createCard = async (tweet) => {
 
   agenda.queueRepetition(send_date, job_data)
 
-  queue.schedule(send_date, "send repetition", job_data)
-
 }
 
 const createRep = (card_id, thread_id) => {
