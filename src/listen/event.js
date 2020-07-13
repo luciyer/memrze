@@ -52,7 +52,7 @@ exports.parseTweets = async (res, tweet_array) => {
 
       if (!tweet.has_command) {
 
-          const correct = card.helpers.checkAnswer(tweet)
+          const correct = await card.helpers.checkAnswer(tweet)
           const updated_card = await card.helpers.stageChange(tweet, correct)
           const new_rep = await card.createRep(updated_card)
           return { updated_card, new_rep }
@@ -77,7 +77,7 @@ exports.parseTweets = async (res, tweet_array) => {
 
       tweetNotRecognized()
       return "Unrecognized"
-      
+
     }
 
   })
