@@ -44,6 +44,7 @@ const createRep = (card_id, thread_id) => {
 
 module.exports = {
   createCard,
+  createRep,
   commands,
   helpers
 }
