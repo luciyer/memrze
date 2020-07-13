@@ -1,15 +1,18 @@
 const Agenda = require("agenda")
 
 const jobs = require("./jobs")
+const twitter = require(appRoot + "/src/tweet")
+const card = require(appRoot + "/src/card")
 
 const db_uri = process.env.MONGODB_URI || "mongodb://localhost/dev"
 
 const connection_options = {
   db : {
     address: db_uri,
-    collection: "tasks"
+    collection: "tasks",
+    options: { useNewUrlParser: true, useUnifiedTopology: true }
   },
-  processEvery: "30 seconds"
+  processEvery: "5 minutes"
 }
 
 const queue = new Agenda(connection_options)
@@ -18,8 +21,28 @@ queue.define("keep server awake", job => {
   jobs.stayAwake()
 })
 
-(async function() {
-  const stay_awake = queue.create("keep server awake")
+queue.define("send repetition", async job => {
+
+  const { card_id, to_user, message } = job.attrs.data
+  const send_result = await twitter.newThread(to_user, message)
+
+  card.createRep(card_id, send_result.id_str)
+
+})
+
+const stay_awake = queue.create("keep server awake")
+
+exports.initialize = async () => {
   await queue.start()
-  await queue.repeatEvery("20 minutes").save()
-})();
+  queue.every("25 minutes", "keep server awake")
+}
+
+exports.stop = async () => {
+  console.log("Stop Queue")
+  await queue.stop()
+  process.exit(0)
+}
+
+exports.queue = () => {
+  return queue
+}

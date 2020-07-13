@@ -19,14 +19,9 @@ const getActiveReps = async () => {
   const active_cards = await db.retrieveActiveCards()
 
   active_cards.forEach(c => {
-    c.repetitions.forEach(r => {
-        formatted_reps.push({
-          user: c.user,
-          count: c.repetitions.length,
-          prompt: c.content.prompt,
-          rep: r
-        })
-    })
+    c.repetitions.forEach(r =>
+      formatted_reps.push({ count: c.repetitions.length, card: c, rep: r })
+    )
   })
 
   return formatted_reps
@@ -39,7 +34,7 @@ const filterReps = (rep_array, interval) => {
 
     if (!d.rep.sent && d.rep.send)
       return false
-      
+
     return new Date(d.rep.send) < interval.end
 
   })
@@ -50,25 +45,20 @@ getNextReps = async (m) => {
 
   const interval = nextInterval(m)
   const all = await getActiveReps()
-
   return filterReps(all, interval)
 
 }
 
 
-exports.sendReps = () => {
+exports.sendRepetition = async () => {
 
   const rep_array = await getNextReps(1)
 
-  rep_array.forEach(r => {
-
-    twitter.newThread(
-      r.user,
-      twitter.message.prompt_message(r.count, r.prompt)
-    )
-
-    db.markSent(r.rep._id)
-
+  const tweet_array = rep_array.map(r => {
+    return twitter.message.prompt_message(r.count, r.card.content.prompt)
   })
 
-})
+  console.log("Tweet Array:", rep_array)
+
+
+}

@@ -72,13 +72,6 @@ const stageChange = (tweet, correct = true) => {
 
 }
 
-const createRepetition = (tweet, card) => {
-
-  const next_rep = scheduler.test(card.stage, tweet.created_date)
-  return db.newRepetition(card._id, next_rep)
-
-}
-
 const checkAnswer = (tweet) => {
 
   db.retrieveCard(tweet.thread_id)
@@ -91,6 +84,5 @@ const checkAnswer = (tweet) => {
 module.exports = {
   archiveCard,
   stageChange,
-  createRepetition,
   checkAnswer
 }

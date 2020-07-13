@@ -1,4 +1,4 @@
-const { IncomingTweet } = require("../src/listen/objects")
+const twitter = require("../src/tweet")
 
 const sample_tweets = {
    created_at: 'Mon Jul 13 02:32:23 +0000 2020',
@@ -68,7 +68,3 @@ const sample_tweets = {
    lang: 'und',
    timestamp_ms: '1594607543203'
 }
-
-const tweet = IncomingTweet(sample_tweet)
-
-console.log(tweet)

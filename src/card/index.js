@@ -1,23 +1,51 @@
 const db = require(appRoot + "/db")
 const twitter = require(appRoot + "/src/tweet")
+const { queue } = require(appRoot + "/src/agenda")
 
 const commands = require("./commands")
 const helpers = require("./helpers")
 const scheduler = require("./timing")
 
-const create = (tweet) => {
+const createCard = async (tweet) => {
 
-  db.newCard(tweet)
-    .then(card => {
+  const card_contents = {
+    user: tweet.user_handle,
+    content : {
+      prompt: tweet.card_content.front,
+      answer: tweet.card_content.back
+    }
+  }
 
-      helpers.createRepetition(tweet, card)
 
-    })
-    .catch(console.error)
+  const new_card = await db.newCard(card_contents),
+        rep_number = new_card.repetitions.length + 1,
+        send_date = scheduler.test(new_card.stage, new Date());
+
+  const job_data = {
+    card_id: new_card._id,
+    to_user: new_card.user,
+    message: twitter.message.prompt_message(rep_number, new_card.content.prompt)
+  }
+
+  queue.schedule(send_date, "send repetition", job_data)
+
+}
+
+const createRep = (card_id, thread_id) => {
+
+  const rep_contents = {
+    repetitions: {
+      thread_id: thread_id
+    }
+  }
+
+  return db.newRepetition(card_id, rep_contents)
+
 }
 
 module.exports = {
-  create,
+  createCard,
+  createRep,
   commands,
   helpers
 }

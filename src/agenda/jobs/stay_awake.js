@@ -1,4 +1,5 @@
 require("dotenv").config()
+const fetch = require("node-fetch")
 
 exports.stayAwake = () => {
 
@@ -11,5 +12,5 @@ exports.stayAwake = () => {
   } catch (error) {
     console.log(`Error fetching ${url}: ${error.message}.`)
   }
-  
+
 }

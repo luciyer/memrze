@@ -1,9 +1,8 @@
 const mongoose = require("mongoose")
 
 const repetition_schema = new mongoose.Schema({
-  thread_id : { type: String },
-  send: { type: Date, required: true },
-  sent: { type: Boolean, default: false },
+  sent: { type: Date, default: Date.now },
+  thread_id: { type: String, required: true },
   responded: { type: Date },
   correct: { type: Boolean },
   stage: { type: Number, min: 0, max: 5 }
